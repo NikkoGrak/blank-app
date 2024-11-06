@@ -4,6 +4,10 @@ import numpy as np
 import random
 from geopy.distance import geodesic
 
+from data_utils import read_waypoints_from_excel
+from ant_colony import AntColony
+from visualization import plot_route_with_satelite
+
 # Fungsi untuk membaca data dari file excel
 def read_excel(file):
     df = pd.read_excel(file)
