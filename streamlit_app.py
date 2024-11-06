@@ -83,7 +83,7 @@ if uploaded_file is not None:
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
-        st.write(waypoints_coordinates)
+        
         
         # Menjalankan algoritma ACO untuk TSP
         aco = AntColony(waypoints_coordinates, start_point, end_point)
