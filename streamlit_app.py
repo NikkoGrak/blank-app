@@ -38,6 +38,9 @@ st.write("Upload data lokasi dan sesuaikan parameter untuk algoritma TSP menggun
 uploaded_file = st.file_uploader("Unggah file Excel berisi data lokasi", type=["xlsx"])
 
 if uploaded_file is not None:
+    # Inisiasi titik awal dan titik akhir (lat, lon)
+    start_point = (-6.192649980767408, 106.83733906793265)
+    end_point = (-6.192649980767408, 106.83733906793265)
     # Membaca file Excel dan menampilkan data
     data = read_excel(uploaded_file)
     st.write("Data Lokasi:")
@@ -76,10 +79,18 @@ if uploaded_file is not None:
         st.write(f"Total Distance: {ga_distance}")
 
     if st.button("Run Ant Colony Optimization"):
-        aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
+        # aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
+        # Membaca waypoint dari file Excel
+        waypoints = read_waypoints_from_excel(uploaded_file)
+        waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
+        st.write(waypoints_coordinates)
+        
+        # Menjalankan algoritma ACO untuk TSP
+        aco = AntColony(waypoints_coordinates, start_point, end_point)
+        best_route_indices, best_distance = aco.optimize()
         st.write("**Ant Colony Optimization Result:**")
-        st.write(f"Optimal Route: {aco_route}")
-        st.write(f"Total Distance: {aco_distance}")
+        st.write(f"Optimal Route: {best_route_indices}")
+        st.write(f"Total Distance: {best_distance}")
 
     if st.button("Run Particle Swarm Optimization"):
         pso_route, pso_distance = run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, c2)
