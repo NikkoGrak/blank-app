@@ -1,5 +1,5 @@
 # ant_colony.py
-
+import streamlit as st
 import numpy as np
 import random
 from geopy.distance import geodesic
@@ -104,5 +104,6 @@ class AntColony:
                 best_distance = shortest_distance
                 best_route = all_routes[all_distances.index(shortest_distance)]
             print(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
-
+            st.write(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
+        
         return best_route, best_distance
