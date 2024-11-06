@@ -1,3 +1,6 @@
 streamlit
 geopy
 openpyxl
+pandas
+matplotlib
+numpy
