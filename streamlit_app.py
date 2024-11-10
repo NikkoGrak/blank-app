@@ -110,10 +110,29 @@ if uploaded_file is not None:
 
     # Tombol untuk menjalankan algoritma
     if col1.button("Run Genetic Algorithm"):
+        start_time = time.time()
         ga_route, ga_distance = run_genetic_algorithm(data, pop_size, elite_size, mutation_rate, generations)
         col1.write("**Genetic Algorithm Result:**")
         col1.write(f"Optimal Route: {ga_route}")
         col1.write(f"Total Distance: {ga_distance}")
+        waypoints = read_waypoints_from_excel(file_path_excel)
+        waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
+
+        ga_tsp = GA_TSP(waypoints_coordinates, start_point, end_point, pop_size, elite_size, mutation_rate, generations)
+        best_route_indices, best_distance = ga_tsp.optimize()
+
+        best_route_coordinates = [waypoints_coordinates[i] for i in best_route_indices]
+        
+        print("Rute terbaik:", best_route_coordinates)
+        print("Jarak total terbaik:", best_distance, "km")
+
+        end_time = time.time()
+        computation_time = end_time - start_time
+        print(f"Waktu komputasi: {computation_time:.2f} detik")
+
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
+
+    
 
     if col2.button("Run Ant Colony Optimization"):
         # aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
