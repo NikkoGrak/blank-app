@@ -121,7 +121,7 @@ if uploaded_file is not None:
         
         
         # Menjalankan algoritma ACO untuk TSP
-        aco = AntColony(waypoints_coordinates, start_point, end_point)
+        aco = AntColony(waypoints_coordinates, start_point, end_point, n_ants, n_best, n_iterations, decay, alpha, beta)
         best_route_indices, best_distance = aco.optimize()
         col2.write("**Ant Colony Optimization Result:**")
         col2.write(f"Optimal Route: {best_route_indices}")
