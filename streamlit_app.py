@@ -125,12 +125,12 @@ if uploaded_file is not None:
 
         best_route_coordinates = [waypoints_coordinates[i] for i in best_route_indices]
         
-        print("Rute terbaik:", best_route_coordinates)
-        print("Jarak total terbaik:", best_distance, "km")
+        col1.write("Rute terbaik:", best_route_coordinates)
+        col1.write("Jarak total terbaik:", best_distance, "km")
 
         end_time = time.time()
         computation_time = end_time - start_time
-        print(f"Waktu komputasi: {computation_time:.2f} detik")
+        col1.write(f"Waktu komputasi: {computation_time:.2f} detik")
 
         plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
 
