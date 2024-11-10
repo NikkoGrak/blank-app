@@ -67,11 +67,8 @@ if uploaded_file is not None:
     
     st.markdown("""
     <style>
-    .flex-container {
-        display: flex;
-        align-items: stretch;
-    }
     .vertical-divider {
+        height: 500px;
         border-left: 2px solid #ddd;
         margin: 0 20px;
     }
@@ -91,11 +88,8 @@ if uploaded_file is not None:
     
     st.markdown("""
     <style>
-    .flex-container {
-        display: flex;
-        align-items: stretch;
-    }
     .vertical-divider {
+        height: 500px;
         border-left: 2px solid #ddd;
         margin: 0 20px;
     }
