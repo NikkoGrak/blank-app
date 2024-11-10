@@ -42,7 +42,7 @@ uploaded_file = st.file_uploader("Unggah file Excel berisi data lokasi", type=["
 
 
 #column for widget AG, ACO and PSO
-col1, col2 , col3 = st.columns(3)
+col1,coldiv1, col2 ,coldiv2, col3 = st.columns([2, 0.1, 2, 0.1, 2])
 
 if uploaded_file is not None:
     # Inisiasi titik awal dan titik akhir (lat, lon)
@@ -62,7 +62,7 @@ if uploaded_file is not None:
     mutation_rate = col1.slider("Mutation Rate", min_value=0.0, max_value=1.0, value=0.01, step=0.01)
     generations = col1.number_input("Generations", min_value=10, max_value=1000, value=100, step=10)
 
-    # Parameter untuk Ant Colony Optimization
+    
     st.markdown("""
     <style>
     .vertical-divider {
@@ -72,8 +72,10 @@ if uploaded_file is not None:
     }
     </style>
     """, unsafe_allow_html=True)
-    with col2:
+    with coldiv1:
     st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
+    
+    # Parameter untuk Ant Colony Optimization
     col2.subheader("Ant Colony Optimization Parameters")
     n_ants = col2.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
     n_iterations = col2.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
@@ -81,7 +83,7 @@ if uploaded_file is not None:
     beta = col2.number_input("Beta (distance influence)", min_value=0.1, max_value=10.0, value=2.0, step=0.1)
     decay = col2.slider("Pheromone Decay", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
 
-    # Parameter untuk Particle Swarm Optimization
+    
     st.markdown("""
     <style>
     .vertical-divider {
@@ -91,8 +93,10 @@ if uploaded_file is not None:
     }
     </style>
     """, unsafe_allow_html=True)
-    with col3:
+    with coldiv2:
     st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
+    
+    # Parameter untuk Particle Swarm Optimization
     col3.subheader("Particle Swarm Optimization Parameters")
     num_particles = col3.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
     num_iterations = col3.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
