@@ -22,7 +22,7 @@ def total_distance(route, start_point, end_point):
 
 # Kelas PSO untuk TSP
 class PSO_TSP:
-    def __init__(self, waypoints, start_point, end_point, num_particles=50, num_iterations=100, alpha=1, beta=2):
+    def __init__(self, waypoints, start_point, end_point, num_particles, num_iterations, alpha, beta):
         self.waypoints = waypoints
         self.start_point = start_point
         self.end_point = end_point
