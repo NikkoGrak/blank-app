@@ -116,7 +116,7 @@ class GA_TSP:
         col1, col2 , col3 = st.columns(3)
         pop = self.initial_population()
         print("Initial distance: " + str(1 / self.rank_routes(pop)[0][1]))
-        st.expander("Lihat Proses Iterasi", expanded=True):
+        
 
         for i in range(self.generations):
             pop = self.next_generation(pop)
