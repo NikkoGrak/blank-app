@@ -14,4 +14,5 @@ def plot_route_with_satelite(best_route, waypoints, start_point, end_point):
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
     ax.legend()
-    plt.show()
+    # plt.show()
+    st.pyplot(fig)
