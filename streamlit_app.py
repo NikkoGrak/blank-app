@@ -126,6 +126,9 @@ if uploaded_file is not None:
         col2.write("**Ant Colony Optimization Result:**")
         col2.write(f"Optimal Route: {best_route_indices}")
         col2.write(f"Total Distance: {best_distance}")
+        # Menampilkan rute dalam plot
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
+
 
     if col3.button("Run Particle Swarm Optimization"):
         pso_route, pso_distance = run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, c2)
