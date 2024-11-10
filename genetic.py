@@ -112,13 +112,17 @@ class GA_TSP:
         return next_generation
 
     def optimize(self):
+        #column for widget AG, ACO and PSO
+        col1, col2 , col3 = st.columns(3)
         pop = self.initial_population()
         print("Initial distance: " + str(1 / self.rank_routes(pop)[0][1]))
+        st.expander("Lihat Proses Iterasi", expanded=True):
 
         for i in range(self.generations):
             pop = self.next_generation(pop)
             best_distance = 1 / self.rank_routes(pop)[0][1]
             print(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
+            col1.write(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
 
         best_route_index = self.rank_routes(pop)[0][0]
         best_route = pop[best_route_index]
