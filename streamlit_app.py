@@ -80,6 +80,8 @@ if uploaded_file is not None:
     # Parameter untuk Ant Colony Optimization
     col2.subheader("Ant Colony Optimization Parameters")
     n_ants = col2.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
+    # Input untuk n_best, dengan maksimal sama dengan n_ants
+    n_best = col2.number_input("Number of Best Ants", min_value=1, max_value=n_ants, value=min(5, n_ants), step=1)
     n_iterations = col2.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
     alpha = col2.number_input("Alpha (pheromone influence)", min_value=0.1, max_value=10.0, value=1.0, step=0.1)
     beta = col2.number_input("Beta (distance influence)", min_value=0.1, max_value=10.0, value=2.0, step=0.1)
