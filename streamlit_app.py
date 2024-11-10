@@ -7,6 +7,7 @@ from geopy.distance import geodesic
 from data_utils import read_waypoints_from_excel
 from ant_colony import AntColony
 from genetic import GA_TSP
+from particle_swarm import PSO_TSP
 from visualization import plot_route_with_satelite
 import time
 
@@ -156,8 +157,16 @@ if uploaded_file is not None:
     if col3.button("Run Particle Swarm Optimization"):
         pso_route, pso_distance = run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, c2)
         col3.write("**Particle Swarm Optimization Result:**")
-        col3.write(f"Optimal Route: {pso_route}")
-        col3.write(f"Total Distance: {pso_distance}")
+        # Membaca waypoint dari file Excel
+        waypoints = read_waypoints_from_excel(uploaded_file)
+        waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
+
+        pso_tsp = PSO_TSP(waypoints_coordinates, start_point, end_point)
+        best_route_indices, best_distance = pso_tsp.optimize()
+        
+        col3.write(f"Optimal Route: {best_route_indices}")
+        col3.write(f"Total Distance: {best_distance}")
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
 
 else:
     st.write("Silakan unggah file Excel untuk memulai.")
