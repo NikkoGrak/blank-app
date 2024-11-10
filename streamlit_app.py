@@ -125,8 +125,8 @@ if uploaded_file is not None:
 
         best_route_coordinates = [waypoints_coordinates[i] for i in best_route_indices]
         
-        col1.write("Rute terbaik:", best_route_coordinates)
-        col1.write("Jarak total terbaik:", best_distance, "km")
+        col1.write(f"Optimal Route: {best_route_indices}")
+        col1.write(f"Total Distance: {best_distance} km")
 
         end_time = time.time()
         computation_time = end_time - start_time
@@ -148,7 +148,7 @@ if uploaded_file is not None:
         best_route_indices, best_distance = aco.optimize()
         col2.write("**Ant Colony Optimization Result:**")
         col2.write(f"Optimal Route: {best_route_indices}")
-        col2.write(f"Total Distance: {best_distance}")
+        col2.write(f"Total Distance: {best_distance} km")
         # Menampilkan rute dalam plot
         plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
 
