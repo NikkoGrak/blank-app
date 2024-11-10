@@ -116,7 +116,7 @@ if uploaded_file is not None:
         col1.write("**Genetic Algorithm Result:**")
         col1.write(f"Optimal Route: {ga_route}")
         col1.write(f"Total Distance: {ga_distance}")
-        waypoints = read_waypoints_from_excel(file_path_excel)
+        waypoints = read_waypoints_from_excel(uploaded_file)
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
 
         ga_tsp = GA_TSP(waypoints_coordinates, start_point, end_point, pop_size, elite_size, mutation_rate, generations)
