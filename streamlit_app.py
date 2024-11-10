@@ -41,8 +41,6 @@ uploaded_file = st.file_uploader("Unggah file Excel berisi data lokasi", type=["
 
 
 
-#column for widget AG, ACO and PSO
-col1,coldiv1, col2 ,coldiv2, col3 = st.columns([2, 1, 2, 1, 2])
 
 if uploaded_file is not None:
     # Inisiasi titik awal dan titik akhir (lat, lon)
@@ -53,7 +51,11 @@ if uploaded_file is not None:
     st.write("Data Lokasi:")
     st.write(data)
 
-    # Menampilkan parameter untuk setiap algoritma
+    
+    #column for widget AG, ACO and PSO
+    col1,coldiv1, col2 ,coldiv2, col3 = st.columns([2, 1, 2, 1, 2])
+    
+# Menampilkan parameter untuk setiap algoritma
 
     # Parameter untuk Genetic Algorithm
     col1.subheader("Genetic Algorithm Parameters")
@@ -65,8 +67,11 @@ if uploaded_file is not None:
     
     st.markdown("""
     <style>
+    .flex-container {
+        display: flex;
+        align-items: stretch;
+    }
     .vertical-divider {
-        height: 200px;
         border-left: 2px solid #ddd;
         margin: 0 20px;
     }
@@ -86,8 +91,11 @@ if uploaded_file is not None:
     
     st.markdown("""
     <style>
+    .flex-container {
+        display: flex;
+        align-items: stretch;
+    }
     .vertical-divider {
-        height: 200px;
         border-left: 2px solid #ddd;
         margin: 0 20px;
     }
