@@ -30,15 +30,18 @@ def run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, 
     # Dummy function untuk contoh, masukkan implementasi TSP PSO yang sesuai di sini
     return "Optimal Route by Particle Swarm Optimization", "Total Distance PSO"
 
-#column for widget AG, ACO and PSO
-col1, col2 , col3 = st.columns(3)
+
 
 # Streamlit UI
-st.title("🎈 Traveling Salesman Problem Solver")
+st.title("📍 Traveling Salesman Problem Solver 🛵")
 st.write("Upload data lokasi dan sesuaikan parameter untuk algoritma TSP menggunakan GA, ACO, dan PSO")
 
 # Input untuk mengunggah file Excel
 uploaded_file = st.file_uploader("Unggah file Excel berisi data lokasi", type=["xlsx"])
+
+
+#column for widget AG, ACO and PSO
+col1, col2 , col3 = st.columns(3)
 
 if uploaded_file is not None:
     # Inisiasi titik awal dan titik akhir (lat, lon)
