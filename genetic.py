@@ -21,7 +21,7 @@ def total_distance(route, start_point, end_point):
     return distance
 # Kelas algoritma genetika untuk TSP
 class GA_TSP:
-    def __init__(self, waypoints, start_point, end_point, pop_size=50, elite_size=10, mutation_rate=0.01, generations=100):
+    def __init__(self, waypoints, start_point, end_point, pop_size, elite_size, mutation_rate, generations):
         self.waypoints = waypoints
         self.start_point = start_point
         self.end_point = end_point
