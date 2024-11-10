@@ -39,15 +39,7 @@ st.write("Upload data lokasi dan sesuaikan parameter untuk algoritma TSP menggun
 # Input untuk mengunggah file Excel
 uploaded_file = st.file_uploader("Unggah file Excel berisi data lokasi", type=["xlsx"])
 
-st.markdown("""
-    <style>
-    .vertical-divider {
-        height: 200px;
-        border-left: 2px solid #ddd;
-        margin: 0 20px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+
 
 #column for widget AG, ACO and PSO
 col1, col2 , col3 = st.columns(3)
@@ -71,7 +63,15 @@ if uploaded_file is not None:
     generations = col1.number_input("Generations", min_value=10, max_value=1000, value=100, step=10)
 
     # Parameter untuk Ant Colony Optimization
-    st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .vertical-divider {
+        height: 200px;
+        border-left: 2px solid #ddd;
+        margin: 0 20px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     col2.subheader("Ant Colony Optimization Parameters")
     n_ants = col2.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
     n_iterations = col2.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
@@ -80,7 +80,15 @@ if uploaded_file is not None:
     decay = col2.slider("Pheromone Decay", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
 
     # Parameter untuk Particle Swarm Optimization
-    st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True) 
+    st.markdown("""
+    <style>
+    .vertical-divider {
+        height: 200px;
+        border-left: 2px solid #ddd;
+        margin: 0 20px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     col3.subheader("Particle Swarm Optimization Parameters")
     num_particles = col3.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
     num_iterations = col3.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
