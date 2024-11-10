@@ -7,6 +7,7 @@ from geopy.distance import geodesic
 from data_utils import read_waypoints_from_excel
 from ant_colony import AntColony
 from visualization import plot_route_with_satelite
+import time
 
 # Fungsi untuk membaca data dari file excel
 def read_excel(file):
