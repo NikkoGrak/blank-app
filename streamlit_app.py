@@ -42,7 +42,7 @@ uploaded_file = st.file_uploader("Unggah file Excel berisi data lokasi", type=["
 
 
 #column for widget AG, ACO and PSO
-col1,coldiv1, col2 ,coldiv2, col3 = st.columns([2, 0.1, 2, 0.1, 2])
+col1,coldiv1, col2 ,coldiv2, col3 = st.columns([2, 1, 2, 1, 2])
 
 if uploaded_file is not None:
     # Inisiasi titik awal dan titik akhir (lat, lon)
