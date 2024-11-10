@@ -62,6 +62,18 @@ if uploaded_file is not None:
     generations = col1.number_input("Generations", min_value=10, max_value=1000, value=100, step=10)
 
     # Parameter untuk Ant Colony Optimization
+     col2.html(
+            '''
+                <div class="divider-vertical-line"></div>
+                <style>
+                    .divider-vertical-line {
+                        border-left: 2px solid rgba(49, 51, 63, 0.2);
+                        height: 320px;
+                        margin: auto;
+                    }
+                </style>
+            '''
+        )
     col2.subheader("Ant Colony Optimization Parameters")
     n_ants = col2.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
     n_iterations = col2.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
@@ -70,6 +82,18 @@ if uploaded_file is not None:
     decay = col2.slider("Pheromone Decay", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
 
     # Parameter untuk Particle Swarm Optimization
+     st.html(
+            '''
+                <div class="divider-vertical-line"></div>
+                <style>
+                    .divider-vertical-line {
+                        border-left: 2px solid rgba(49, 51, 63, 0.2);
+                        height: 320px;
+                        margin: auto;
+                    }
+                </style>
+            '''
+        )
     col3.subheader("Particle Swarm Optimization Parameters")
     num_particles = col3.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
     num_iterations = col3.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
