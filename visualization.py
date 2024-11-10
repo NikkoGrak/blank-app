@@ -1,6 +1,7 @@
  
 
 import matplotlib.pyplot as plt
+import streamlit as st
 
 def plot_route_with_satelite(best_route, waypoints, start_point, end_point):
     latitudes = [start_point[0]] + [waypoints[i][0] for i in best_route] + [end_point[0]]
