@@ -72,8 +72,8 @@ if uploaded_file is not None:
     }
     </style>
     """, unsafe_allow_html=True)
-    with coldiv1:
-    st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
+    
+    coldiv1.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
     
     # Parameter untuk Ant Colony Optimization
     col2.subheader("Ant Colony Optimization Parameters")
@@ -93,8 +93,8 @@ if uploaded_file is not None:
     }
     </style>
     """, unsafe_allow_html=True)
-    with coldiv2:
-    st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
+    
+    coldiv2.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
     
     # Parameter untuk Particle Swarm Optimization
     col3.subheader("Particle Swarm Optimization Parameters")
