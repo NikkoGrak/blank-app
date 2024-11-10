@@ -72,6 +72,7 @@ if uploaded_file is not None:
     }
     </style>
     """, unsafe_allow_html=True)
+    st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
     col2.subheader("Ant Colony Optimization Parameters")
     n_ants = col2.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
     n_iterations = col2.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
@@ -89,6 +90,7 @@ if uploaded_file is not None:
     }
     </style>
     """, unsafe_allow_html=True)
+    st.markdown('<div class="vertical-divider"></div>', unsafe_allow_html=True)
     col3.subheader("Particle Swarm Optimization Parameters")
     num_particles = col3.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
     num_iterations = col3.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
