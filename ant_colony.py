@@ -16,7 +16,7 @@ def total_distance(route, start_point, end_point):
     return distance
 
 class AntColony:
-    def __init__(self, waypoints, start_point, end_point, n_ants=10, n_best=50, n_iterations=100, decay=0.95, alpha=1, beta=2):
+    def __init__(self, waypoints, start_point, end_point, n_ants, n_best, n_iterations, decay, alpha, beta):
         self.waypoints = waypoints
         self.start_point = start_point
         self.end_point = end_point
