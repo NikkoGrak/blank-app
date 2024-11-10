@@ -30,6 +30,9 @@ def run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, 
     # Dummy function untuk contoh, masukkan implementasi TSP PSO yang sesuai di sini
     return "Optimal Route by Particle Swarm Optimization", "Total Distance PSO"
 
+#column for widget AG, ACO and PSO
+col1, col2 , col3 = st.columns(3)
+
 # Streamlit UI
 st.title("🎈 Traveling Salesman Problem Solver")
 st.write("Upload data lokasi dan sesuaikan parameter untuk algoritma TSP menggunakan GA, ACO, dan PSO")
@@ -49,36 +52,36 @@ if uploaded_file is not None:
     # Menampilkan parameter untuk setiap algoritma
 
     # Parameter untuk Genetic Algorithm
-    st.subheader("Genetic Algorithm Parameters")
-    pop_size = st.number_input("Population Size", min_value=10, max_value=500, value=50, step=10)
-    elite_size = st.number_input("Elite Size", min_value=1, max_value=100, value=10, step=1)
-    mutation_rate = st.slider("Mutation Rate", min_value=0.0, max_value=1.0, value=0.01, step=0.01)
-    generations = st.number_input("Generations", min_value=10, max_value=1000, value=100, step=10)
+    col1.subheader("Genetic Algorithm Parameters")
+    pop_size = col1.number_input("Population Size", min_value=10, max_value=500, value=50, step=10)
+    elite_size = col1.number_input("Elite Size", min_value=1, max_value=100, value=10, step=1)
+    mutation_rate = col1.slider("Mutation Rate", min_value=0.0, max_value=1.0, value=0.01, step=0.01)
+    generations = col1.number_input("Generations", min_value=10, max_value=1000, value=100, step=10)
 
     # Parameter untuk Ant Colony Optimization
-    st.subheader("Ant Colony Optimization Parameters")
-    n_ants = st.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
-    n_iterations = st.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
-    alpha = st.number_input("Alpha (pheromone influence)", min_value=0.1, max_value=10.0, value=1.0, step=0.1)
-    beta = st.number_input("Beta (distance influence)", min_value=0.1, max_value=10.0, value=2.0, step=0.1)
-    decay = st.slider("Pheromone Decay", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
+    col2.subheader("Ant Colony Optimization Parameters")
+    n_ants = col2.number_input("Number of Ants", min_value=5, max_value=100, value=10, step=1)
+    n_iterations = col2.number_input("IterationsN", min_value=10, max_value=1000, value=100, step=10)
+    alpha = col2.number_input("Alpha (pheromone influence)", min_value=0.1, max_value=10.0, value=1.0, step=0.1)
+    beta = col2.number_input("Beta (distance influence)", min_value=0.1, max_value=10.0, value=2.0, step=0.1)
+    decay = col2.slider("Pheromone Decay", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
 
     # Parameter untuk Particle Swarm Optimization
-    st.subheader("Particle Swarm Optimization Parameters")
-    num_particles = st.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
-    num_iterations = st.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
-    w = st.number_input("Inertia Weight", min_value=0.1, max_value=1.0, value=0.5, step=0.1)
-    c1 = st.number_input("Cognitive Coefficient (c1)", min_value=0.1, max_value=2.0, value=1.5, step=0.1)
-    c2 = st.number_input("Social Coefficient (c2)", min_value=0.1, max_value=2.0, value=1.5, step=0.1)
+    col3.subheader("Particle Swarm Optimization Parameters")
+    num_particles = col3.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
+    num_iterations = col3.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
+    w = col3.number_input("Inertia Weight", min_value=0.1, max_value=1.0, value=0.5, step=0.1)
+    c1 = col3.number_input("Cognitive Coefficient (c1)", min_value=0.1, max_value=2.0, value=1.5, step=0.1)
+    c2 = col3.number_input("Social Coefficient (c2)", min_value=0.1, max_value=2.0, value=1.5, step=0.1)
 
     # Tombol untuk menjalankan algoritma
-    if st.button("Run Genetic Algorithm"):
+    if col1.button("Run Genetic Algorithm"):
         ga_route, ga_distance = run_genetic_algorithm(data, pop_size, elite_size, mutation_rate, generations)
-        st.write("**Genetic Algorithm Result:**")
-        st.write(f"Optimal Route: {ga_route}")
-        st.write(f"Total Distance: {ga_distance}")
+        col1.write("**Genetic Algorithm Result:**")
+        col1.write(f"Optimal Route: {ga_route}")
+        col1.write(f"Total Distance: {ga_distance}")
 
-    if st.button("Run Ant Colony Optimization"):
+    if col2.button("Run Ant Colony Optimization"):
         # aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
@@ -88,15 +91,15 @@ if uploaded_file is not None:
         # Menjalankan algoritma ACO untuk TSP
         aco = AntColony(waypoints_coordinates, start_point, end_point)
         best_route_indices, best_distance = aco.optimize()
-        st.write("**Ant Colony Optimization Result:**")
-        st.write(f"Optimal Route: {best_route_indices}")
-        st.write(f"Total Distance: {best_distance}")
+        col2.write("**Ant Colony Optimization Result:**")
+        col2.write(f"Optimal Route: {best_route_indices}")
+        col2.write(f"Total Distance: {best_distance}")
 
-    if st.button("Run Particle Swarm Optimization"):
+    if col3.button("Run Particle Swarm Optimization"):
         pso_route, pso_distance = run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, c2)
-        st.write("**Particle Swarm Optimization Result:**")
-        st.write(f"Optimal Route: {pso_route}")
-        st.write(f"Total Distance: {pso_distance}")
+        col3.write("**Particle Swarm Optimization Result:**")
+        col3.write(f"Optimal Route: {pso_route}")
+        col3.write(f"Total Distance: {pso_distance}")
 
 else:
     st.write("Silakan unggah file Excel untuk memulai.")
