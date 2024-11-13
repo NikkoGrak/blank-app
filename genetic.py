@@ -126,6 +126,28 @@ class GA_TSP:
         next_generation = self.mutate_population(children)
         return next_generation
 
+    def two_opt(route, waypoints, start_point, end_point):
+        best_route = route.copy()
+        best_distance = total_distance([waypoints[i] for i in best_route], start_point, end_point)
+    
+        improved = True
+        while improved:
+            improved = False
+            for i in range(1, len(best_route) - 1):
+                for j in range(i + 1, len(best_route)):
+                    if j - i == 1: 
+                        continue
+                    # Swap two edges to create a new route
+                    new_route = best_route[:i] + best_route[i:j][::-1] + best_route[j:]
+                    new_distance = total_distance([waypoints[k] for k in new_route], start_point, end_point)
+                
+                    if new_distance < best_distance:
+                        best_route = new_route
+                        best_distance = new_distance
+                        improved = True
+        return best_route, best_distance
+
+
     def optimize(self):
         #column for widget AG, ACO and PSO
         col1, col2 , col3 = st.columns(3)
@@ -142,5 +164,9 @@ class GA_TSP:
         best_route_index = self.rank_routes(pop)[0][0]
         best_route = pop[best_route_index]
         best_distance = 1 / self.rank_routes(pop)[0][1]
+
+        # Optimasi menggunakan 2-opt
+        best_route, best_distance = two_opt(best_route, self.waypoints, self.start_point, self.end_point)
+        print(f"Optimasi 2-opt menghasilkan jarak: {best_distance:.2f} km")
         
         return best_route, best_distance
