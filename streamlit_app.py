@@ -167,7 +167,7 @@ if uploaded_file is not None:
         
         # Membaca waypoint dari file Excel
         pso = PSO_TSP(waypoints_coordinates, start_point, end_point, num_particles, num_iterations, w, c1, c2)
-        best_route, best_distance = pso.optimize()
+        best_route_indices, best_distance = pso.optimize()
         
         col3.write("**Particle Swarm Optimization Result:**")
         
