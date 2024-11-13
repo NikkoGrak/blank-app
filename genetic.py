@@ -126,26 +126,24 @@ class GA_TSP:
         next_generation = self.mutate_population(children)
         return next_generation
 
-    def two_opt(route, waypoints, start_point, end_point):
-        best_route = route.copy()
-        best_distance = total_distance([waypoints[i] for i in best_route], start_point, end_point)
-    
+     # Fungsi 2-opt sebagai metode dalam kelas
+    def two_opt(self, route):
+        """ Algoritma 2-opt untuk mengoptimalkan rute """
         improved = True
+        best_distance = total_distance([self.waypoints[i] for i in route], self.start_point, self.end_point)
+
         while improved:
             improved = False
-            for i in range(1, len(best_route) - 1):
-                for j in range(i + 1, len(best_route)):
-                    if j - i == 1: 
-                        continue
-                    # Swap two edges to create a new route
-                    new_route = best_route[:i] + best_route[i:j][::-1] + best_route[j:]
-                    new_distance = total_distance([waypoints[k] for k in new_route], start_point, end_point)
-                
+            for i in range(1, len(route) - 1):
+                for j in range(i + 1, len(route)):
+                    new_route = route[:i] + route[i:j + 1][::-1] + route[j + 1:]
+                    new_distance = total_distance([self.waypoints[k] for k in new_route], self.start_point, self.end_point)
+                    
                     if new_distance < best_distance:
-                        best_route = new_route
+                        route = new_route
                         best_distance = new_distance
                         improved = True
-        return best_route, best_distance
+        return route
 
 
     # def optimize(self):
