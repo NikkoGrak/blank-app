@@ -163,10 +163,13 @@ class GA_TSP:
 
         best_route_index = self.rank_routes(pop)[0][0]
         best_route = pop[best_route_index]
-        best_distance = 1 / self.rank_routes(pop)[0][1]
+        # best_distance = 1 / self.rank_routes(pop)[0][1]
 
-        # Optimasi menggunakan 2-opt
-        best_route, best_distance = two_opt(best_route, self.waypoints, self.start_point, self.end_point)
-        print(f"Optimasi 2-opt menghasilkan jarak: {best_distance:.2f} km")
+        # Jalankan algoritma 2-opt untuk mengoptimalkan rute
+        best_route = two_opt(best_route, self.waypoints, self.start_point, self.end_point)
+        best_distance = total_distance([self.waypoints[i] for i in best_route], self.start_point, self.end_point)
+
+        print(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
+        col2.write(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
         
         return best_route, best_distance
