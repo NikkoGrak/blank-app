@@ -165,16 +165,12 @@ if uploaded_file is not None:
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
 
         
+        # Membaca waypoint dari file Excel
         pso = PSO_TSP(waypoints_coordinates, start_point, end_point, num_particles, num_iterations, w, c1, c2)
         best_route, best_distance = pso.optimize()
         
         col3.write("**Particle Swarm Optimization Result:**")
-        # Membaca waypoint dari file Excel
-        waypoints = read_waypoints_from_excel(uploaded_file)
-        waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
-
-        pso_tsp = PSO_TSP(waypoints_coordinates, start_point, end_point)
-        best_route_indices, best_distance = pso_tsp.optimize()
+        
 
         col3.write(f"Optimal Route: {best_route_indices}")
         col3.write(f"Total Distance: {best_distance} km")
