@@ -11,7 +11,7 @@ def plot_route_with_satelite(best_route, waypoints, start_point, end_point, titl
     ax.plot(start_point[1], start_point[0], 'ro', markersize=10, label='Start/End Point')
     for i, (lat, lon) in enumerate(zip(latitudes, longitudes)):
         ax.annotate(f'{i}', (lon, lat))
-    ax.set_title("Best Route for TSP with {titlename}")
+    ax.set_title(f"Best Route for TSP with {titlename}")
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
     ax.legend()
