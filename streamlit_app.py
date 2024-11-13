@@ -105,8 +105,8 @@ if uploaded_file is not None:
     
     # Parameter untuk Particle Swarm Optimization
     col3.subheader("Particle Swarm Optimization Parameters")
-    num_particles = col3.number_input("Number of Particles", min_value=5, max_value=100, value=10, step=1)
-    num_iterations = col3.number_input("IterationsNUM", min_value=10, max_value=1000, value=100, step=10)
+    num_particles = col3.number_input("Particles", min_value=5, max_value=100, value=10, step=1)
+    num_iterations = col3.number_input("Iterations", min_value=10, max_value=1000, value=100, step=10)
     w = col3.number_input("Inertia Weight", min_value=0.1, max_value=1.0, value=0.5, step=0.1)
     c1 = col3.number_input("Cognitive Coefficient (c1)", min_value=0.1, max_value=2.0, value=1.5, step=0.1)
     c2 = col3.number_input("Social Coefficient (c2)", min_value=0.1, max_value=2.0, value=1.5, step=0.1)
@@ -138,6 +138,7 @@ if uploaded_file is not None:
     
 
     if col2.button("Run Ant Colony Optimization"):
+        start_time = time.time()
         # aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
@@ -147,15 +148,25 @@ if uploaded_file is not None:
         # Menjalankan algoritma ACO untuk TSP
         aco = AntColony(waypoints_coordinates, start_point, end_point, n_ants, n_best, n_iterations, decay, alpha, beta)
         best_route_indices, best_distance = aco.optimize()
-        col2.write("**Ant Colony Optimization Result:**")
+
         col2.write(f"Optimal Route: {best_route_indices}")
         col2.write(f"Total Distance: {best_distance} km")
+
+        end_time = time.time()
+        computation_time = end_time - start_time
+        col2.write(f"Waktu komputasi: {computation_time:.2f} detik")
         # Menampilkan rute dalam plot
         plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point,"Ant Colony Optimization")
 
 
     if col3.button("Run Particle Swarm Optimization"):
-        pso_route, pso_distance = run_particle_swarm_optimization(data, num_particles, num_iterations, w, c1, c2)
+         waypoints = read_waypoints_from_excel(uploaded_file)
+        waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
+
+        
+        pso = PSO_TSP(waypoints_coordinates, start_point, end_point, num_particles, num_iterations, w, c1, c2)
+        best_route, best_distance = pso.optimize()
+        
         col3.write("**Particle Swarm Optimization Result:**")
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
@@ -163,9 +174,13 @@ if uploaded_file is not None:
 
         pso_tsp = PSO_TSP(waypoints_coordinates, start_point, end_point)
         best_route_indices, best_distance = pso_tsp.optimize()
-        
+
         col3.write(f"Optimal Route: {best_route_indices}")
-        col3.write(f"Total Distance: {best_distance}")
+        col3.write(f"Total Distance: {best_distance} km")
+
+        end_time = time.time()
+        computation_time = end_time - start_time
+        col3.write(f"Waktu komputasi: {computation_time:.2f} detik")
         plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point,"Particle Swarm Optimization")
 
 else:
