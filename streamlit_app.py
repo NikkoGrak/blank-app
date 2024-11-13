@@ -133,7 +133,7 @@ if uploaded_file is not None:
         computation_time = end_time - start_time
         col1.write(f"Waktu komputasi: {computation_time:.2f} detik")
 
-        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point, "Genetic Algorithm")
 
     
 
@@ -151,7 +151,7 @@ if uploaded_file is not None:
         col2.write(f"Optimal Route: {best_route_indices}")
         col2.write(f"Total Distance: {best_distance} km")
         # Menampilkan rute dalam plot
-        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point,"Ant Colony Optimization")
 
 
     if col3.button("Run Particle Swarm Optimization"):
@@ -166,7 +166,7 @@ if uploaded_file is not None:
         
         col3.write(f"Optimal Route: {best_route_indices}")
         col3.write(f"Total Distance: {best_distance}")
-        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point)
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point,"Particle Swarm Optimization")
 
 else:
     st.write("Silakan unggah file Excel untuk memulai.")
