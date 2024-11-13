@@ -148,6 +148,33 @@ class GA_TSP:
         return best_route, best_distance
 
 
+    # def optimize(self):
+    #     #column for widget AG, ACO and PSO
+    #     col1, col2 , col3 = st.columns(3)
+    #     pop = self.initial_population()
+    #     print("Initial distance: " + str(1 / self.rank_routes(pop)[0][1]))
+        
+
+    #     for i in range(self.generations):
+    #         pop = self.next_generation(pop)
+    #         best_distance = 1 / self.rank_routes(pop)[0][1]
+    #         print(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
+    #         col1.write(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
+
+    #     best_route_index = self.rank_routes(pop)[0][0]
+    #     best_route = pop[best_route_index]
+    #     best_distance = 1 / self.rank_routes(pop)[0][1]
+
+    #     # Jalankan algoritma 2-opt untuk mengoptimalkan rute
+    #     best_route = two_opt(best_route, self.waypoints, self.start_point, self.end_point)
+    #     best_distance = total_distance([self.waypoints[i] for i in best_route], self.start_point, self.end_point)
+
+    #     print(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
+    #     col2.write(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
+        
+    #     return best_route, best_distance
+
+
     def optimize(self):
         #column for widget AG, ACO and PSO
         col1, col2 , col3 = st.columns(3)
@@ -163,7 +190,6 @@ class GA_TSP:
 
         best_route_index = self.rank_routes(pop)[0][0]
         best_route = pop[best_route_index]
-        # best_distance = 1 / self.rank_routes(pop)[0][1]
 
         # Jalankan algoritma 2-opt untuk mengoptimalkan rute
         best_route = two_opt(best_route, self.waypoints, self.start_point, self.end_point)
