@@ -45,22 +45,32 @@ class GA_TSP:
             fitness_results[i] = 1 / distance  # Menggunakan invers jarak sebagai fitness
         return sorted(fitness_results.items(), key=lambda x: x[1], reverse=True)
 
-    def selection(self, ranked_routes):
-        selection_results = []
-        df = pd.DataFrame(ranked_routes, columns=["Index", "Fitness"])
-        df['cum_sum'] = df.Fitness.cumsum()
-        df['cum_perc'] = 100 * df.cum_sum / df.Fitness.sum()
+    # def selection(self, ranked_routes):
+    #     selection_results = []
+    #     df = pd.DataFrame(ranked_routes, columns=["Index", "Fitness"])
+    #     df['cum_sum'] = df.Fitness.cumsum()
+    #     df['cum_perc'] = 100 * df.cum_sum / df.Fitness.sum()
 
+    #     for _ in range(self.elite_size):
+    #         selection_results.append(ranked_routes[_][0])
+
+    #     for _ in range(len(ranked_routes) - self.elite_size):
+    #         pick = 100 * random.random()
+    #         for i in range(len(ranked_routes)):
+    #             if pick <= df.iat[i, 3]:
+    #                 selection_results.append(ranked_routes[i][0])
+    #                 break
+    #     return selection_results
+    def selection(self, ranked_routes):
+        tournament_size = 5
+        selection_results = []
         for _ in range(self.elite_size):
             selection_results.append(ranked_routes[_][0])
-
         for _ in range(len(ranked_routes) - self.elite_size):
-            pick = 100 * random.random()
-            for i in range(len(ranked_routes)):
-                if pick <= df.iat[i, 3]:
-                    selection_results.append(ranked_routes[i][0])
-                    break
+            tournament = random.sample(ranked_routes, tournament_size)
+            selection_results.append(max(tournament, key=lambda x: x[1])[0])
         return selection_results
+
 
     def mating_pool(self, population, selection_results):
         return [population[i] for i in selection_results]
