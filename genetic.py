@@ -99,10 +99,10 @@ class GA_TSP:
     #             individual[swapped], individual[swap_with] = individual[swap_with], individual[swapped]
     #     return individual
     def mutate(self, individual):
-    if random.random() < self.mutation_rate:
-        start, end = sorted(random.sample(range(len(individual)), 2))
-        individual[start:end] = reversed(individual[start:end])
-    return individual
+        if random.random() < self.mutation_rate:
+            start, end = sorted(random.sample(range(len(individual)), 2))
+            individual[start:end] = reversed(individual[start:end])
+        return individual
 
     def mutate_population(self, population):
         mutated_pop = [self.mutate(ind) for ind in population]
