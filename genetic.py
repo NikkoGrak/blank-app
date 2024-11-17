@@ -45,6 +45,7 @@ class GA_TSP:
             fitness_results[i] = 1 / distance  # Menggunakan invers jarak sebagai fitness
         return sorted(fitness_results.items(), key=lambda x: x[1], reverse=True)
 
+    #menggunakan metode roulette selection
     # def selection(self, ranked_routes):
     #     selection_results = []
     #     df = pd.DataFrame(ranked_routes, columns=["Index", "Fitness"])
@@ -61,6 +62,8 @@ class GA_TSP:
     #                 selection_results.append(ranked_routes[i][0])
     #                 break
     #     return selection_results
+    
+    #menggunakan metode Tournamen selection
     def selection(self, ranked_routes):
         tournament_size = 5
         selection_results = []
@@ -126,73 +129,19 @@ class GA_TSP:
         next_generation = self.mutate_population(children)
         return next_generation
 
-
-
-    # def optimize(self):
-    #     #column for widget AG, ACO and PSO
-    #     col1, col2 , col3 = st.columns(3)
-    #     pop = self.initial_population()
-    #     print("Initial distance: " + str(1 / self.rank_routes(pop)[0][1]))
-        
-
-    #     for i in range(self.generations):
-    #         pop = self.next_generation(pop)
-    #         best_distance = 1 / self.rank_routes(pop)[0][1]
-    #         print(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
-    #         col1.write(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
-
-    #     best_route_index = self.rank_routes(pop)[0][0]
-    #     best_route = pop[best_route_index]
-    #     best_distance = 1 / self.rank_routes(pop)[0][1]
-
-    #     # Jalankan algoritma 2-opt untuk mengoptimalkan rute
-    #     best_route = two_opt(best_route, self.waypoints, self.start_point, self.end_point)
-    #     best_distance = total_distance([self.waypoints[i] for i in best_route], self.start_point, self.end_point)
-
-    #     print(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
-    #     col2.write(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
-        
-    #     return best_route, best_distance
-
-
- # Fungsi 2-opt sebagai metode dalam kelas
-    def two_opt(self, route):
-        """ Algoritma 2-opt untuk mengoptimalkan rute """
-        improved = True
-        best_distance = total_distance([self.waypoints[i] for i in route], self.start_point, self.end_point)
-
-        while improved:
-            improved = False
-            for i in range(1, len(route) - 1):
-                for j in range(i + 1, len(route)):
-                    new_route = route[:i] + route[i:j + 1][::-1] + route[j + 1:]
-                    new_distance = total_distance([self.waypoints[k] for k in new_route], self.start_point, self.end_point)
-                    
-                    if new_distance < best_distance:
-                        route = new_route
-                        best_distance = new_distance
-                        improved = True
-        return route
-
     def optimize(self):
-        col1, col2, col3 = st.columns(3)
         pop = self.initial_population()
         print("Initial distance: " + str(1 / self.rank_routes(pop)[0][1]))
 
         for i in range(self.generations):
             pop = self.next_generation(pop)
             best_distance = 1 / self.rank_routes(pop)[0][1]
-            # print(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
-            # col1.write(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
+            print(f"Generasi {i+1}/{self.generations}, Jarak Terbaik: {best_distance:.2f} km")
 
         best_route_index = self.rank_routes(pop)[0][0]
         best_route = pop[best_route_index]
-
-        # Jalankan algoritma 2-opt sebagai metode kelas
-        best_route = self.two_opt(best_route)
-        best_distance = total_distance([self.waypoints[i] for i in best_route], self.start_point, self.end_point)
-
-        # print(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
-        # col2.write(f"Jarak terbaik setelah 2-opt: {best_distance:.2f} km")
+        best_distance = 1 / self.rank_routes(pop)[0][1]
         
         return best_route, best_distance
+
+  
