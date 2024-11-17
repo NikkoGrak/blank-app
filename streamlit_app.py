@@ -54,13 +54,11 @@ if uploaded_file is not None:
     st.write("Data Lokasi:")
     st.write(data)
     
-    # Mendapatkan daftar kota yang unik berdasarkan rute
-    kota_list = [data.iloc[i]['Kota'] for i in best_route_indices]
-    distinct_cities = list(set(kota_list))
-    distinct_cities.sort()
+    # Mendapatkan daftar kota yang unik dari data
+    distinct_cities = data['Kota'].dropna().unique().tolist()
 
-    # Membuat label yang menyertakan kota-kota unik
-    cities_label = ', '.join(distinct_cities)
+    # Mengurutkan kota secara alfabetis (opsional)
+    distinct_cities.sort()
     st.write(cities_label)
 
     
