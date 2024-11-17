@@ -53,6 +53,15 @@ if uploaded_file is not None:
     data = read_excel(uploaded_file)
     st.write("Data Lokasi:")
     st.write(data)
+    
+    # Mendapatkan daftar kota yang unik berdasarkan rute
+    kota_list = [data.iloc[i]['Kota'] for i in best_route_indices]
+    distinct_cities = list(set(kota_list))
+    distinct_cities.sort()
+
+    # Membuat label yang menyertakan kota-kota unik
+    cities_label = ', '.join(distinct_cities)
+    st.write(cities_label)
 
     
     #column for widget AG, ACO and PSO
