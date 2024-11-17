@@ -61,7 +61,7 @@ if uploaded_file is not None:
     distinct_cities.sort()
     # Menggabungkan daftar kota dengan tanda koma
     cities_label = ', '.join(distinct_cities)
-    st.write(distinct_cities)
+    st.write(f"kota yg dikunjungi {distinct_cities}")
 
     
     #column for widget AG, ACO and PSO
