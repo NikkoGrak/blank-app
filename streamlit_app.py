@@ -59,6 +59,8 @@ if uploaded_file is not None:
 
     # Mengurutkan kota secara alfabetis (opsional)
     distinct_cities.sort()
+    # Menggabungkan daftar kota dengan tanda koma
+    cities_label = ', '.join(distinct_cities)
     st.write(distinct_cities)
 
     
