@@ -59,7 +59,7 @@ if uploaded_file is not None:
 
     # Mengurutkan kota secara alfabetis (opsional)
     distinct_cities.sort()
-    st.write(cities_label)
+    st.write(distinct_cities)
 
     
     #column for widget AG, ACO and PSO
