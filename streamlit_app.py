@@ -142,7 +142,7 @@ if uploaded_file is not None:
         computation_time = end_time - start_time
         col1.write(f"Waktu komputasi: {computation_time:.2f} detik")
 
-        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point, "Genetic Algorithm")
+        plot_route_with_satelite(best_route_indices, waypoints_coordinates, start_point, end_point, f"Genetic Algorithm {cities_label}")
 
     
 
