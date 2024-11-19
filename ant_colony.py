@@ -93,7 +93,7 @@ class AntColony:
 
     def optimize(self):
         #column for widget AG, ACO and PSO
-        col1, col2 , col3 = st.columns(3)
+        # col1, col2 , col3 = st.columns(3)
         best_route = None
         best_distance = float('inf')
         for iteration in range(self.n_iterations):
@@ -105,7 +105,7 @@ class AntColony:
             if shortest_distance < best_distance:
                 best_distance = shortest_distance
                 best_route = all_routes[all_distances.index(shortest_distance)]
-            # print(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
-            col2.write(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
+            print(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
+            # col2.write(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
         
         return best_route, best_distance
