@@ -186,8 +186,6 @@ if uploaded_file is not None:
     if col3.button("Run Particle Swarm Optimization"):
         start_time = time.time()
         waypoints = read_waypoints_from_excel(uploaded_file)
-        #agar index dimulai dari angka 1
-        waypoints.index = waypoints.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
  
         
