@@ -51,7 +51,7 @@ if uploaded_file is not None:
     end_point = (-6.192649980767408, 106.83733906793265)
     # Membaca file Excel dan menampilkan data
     data = read_excel(uploaded_file)
-    //agar index dimulai dari angka 1
+    #agar index dimulai dari angka 1
     data.index = data.index + 1
     st.write("Data Lokasi:")
     st.write(data)
