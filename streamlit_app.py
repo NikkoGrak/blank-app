@@ -136,9 +136,14 @@ if uploaded_file is not None:
         ga_tsp = GA_TSP(waypoints_coordinates, start_point, end_point, pop_size, elite_size, mutation_rate, generations)
         best_route_indices, best_distance = ga_tsp.optimize()
 
+
+        # Tambahkan 1 ke setiap indeks di best_route_indices untuk ditampilkan
+        best_route_indices_display = [i + 1 for i in best_route_indices]
+
+        # Tetap gunakan best_route_indices asli untuk pengambilan koordinat
         best_route_coordinates = [waypoints_coordinates[i] for i in best_route_indices]
         col1.write("**Genetic Algorithm Result:**")
-        col1.write(f"Optimal Route: {best_route_indices}")
+        col1.write(f"Optimal Route: {best_route_indices_display}")
         col1.write(f"Total Distance: {best_distance} km")
 
         end_time = time.time()
@@ -154,18 +159,21 @@ if uploaded_file is not None:
         # aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
-        #agar index dimulai dari angka 1
-        waypoints.index = waypoints.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
  
-        
         
         # Menjalankan algoritma ACO untuk TSP
         aco = AntColony(waypoints_coordinates, start_point, end_point, n_ants, n_best, n_iterations, decay, alpha, beta)
         best_route_indices, best_distance = aco.optimize()
+
+        # Tambahkan 1 ke setiap indeks di best_route_indices untuk ditampilkan
+        best_route_indices_display = [i + 1 for i in best_route_indices]
+
+        # Tetap gunakan best_route_indices asli untuk pengambilan koordinat
+        best_route_coordinates = [waypoints_coordinates[i] for i in best_route_indices]
         
         col2.write("**Ant Colony Optimization Result:**")
-        col2.write(f"Optimal Route: {best_route_indices}")
+        col2.write(f"Optimal Route: {best_route_indices_display}")
         col2.write(f"Total Distance: {best_distance} km")
 
         end_time = time.time()
