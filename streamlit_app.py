@@ -130,7 +130,7 @@ if uploaded_file is not None:
       
         waypoints = read_waypoints_from_excel(uploaded_file)
         #agar index dimulai dari angka 1
-        waypoints.index = data.index + 1
+        waypoints.index = waypoints.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
 
         ga_tsp = GA_TSP(waypoints_coordinates, start_point, end_point, pop_size, elite_size, mutation_rate, generations)
@@ -155,8 +155,9 @@ if uploaded_file is not None:
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
         #agar index dimulai dari angka 1
-        waypoints.index = data.index + 1
+        waypoints.index = waypoints.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
+ 
         
         
         # Menjalankan algoritma ACO untuk TSP
@@ -178,9 +179,9 @@ if uploaded_file is not None:
         start_time = time.time()
         waypoints = read_waypoints_from_excel(uploaded_file)
         #agar index dimulai dari angka 1
-        waypoints.index = data.index + 1
+        waypoints.index = waypoints.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
-
+ 
         
         # Membaca waypoint dari file Excel
         pso = PSO_TSP(waypoints_coordinates, start_point, end_point, num_particles, num_iterations, w, c1, c2)
