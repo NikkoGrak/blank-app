@@ -125,10 +125,12 @@ if uploaded_file is not None:
     # Tombol untuk menjalankan algoritma
     if col1.button("Run Genetic Algorithm"):
         start_time = time.time()
-        ga_route, ga_distance = run_genetic_algorithm(data, pop_size, elite_size, mutation_rate, generations)
+         
        
       
         waypoints = read_waypoints_from_excel(uploaded_file)
+        #agar index dimulai dari angka 1
+        waypoints.index = data.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
 
         ga_tsp = GA_TSP(waypoints_coordinates, start_point, end_point, pop_size, elite_size, mutation_rate, generations)
@@ -152,6 +154,8 @@ if uploaded_file is not None:
         # aco_route, aco_distance = run_ant_colony_optimization(data, n_ants, n_iterations, alpha, beta, decay)
         # Membaca waypoint dari file Excel
         waypoints = read_waypoints_from_excel(uploaded_file)
+        #agar index dimulai dari angka 1
+        waypoints.index = data.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
         
         
@@ -173,6 +177,8 @@ if uploaded_file is not None:
     if col3.button("Run Particle Swarm Optimization"):
         start_time = time.time()
         waypoints = read_waypoints_from_excel(uploaded_file)
+        #agar index dimulai dari angka 1
+        waypoints.index = data.index + 1
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
 
         
