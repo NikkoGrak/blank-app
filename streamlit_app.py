@@ -129,8 +129,7 @@ if uploaded_file is not None:
        
       
         waypoints = read_waypoints_from_excel(uploaded_file)
-        #agar index dimulai dari angka 1
-        waypoints.index = waypoints.index + 1
+      
         waypoints_coordinates = [(item.latitude, item.longitude) for item in waypoints]
 
         ga_tsp = GA_TSP(waypoints_coordinates, start_point, end_point, pop_size, elite_size, mutation_rate, generations)
