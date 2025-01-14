@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import random
 from geopy.distance import geodesic
-
 from data_utils import read_waypoints_from_excel
 from ant_colony import AntColony
 from genetic import GA_TSP
