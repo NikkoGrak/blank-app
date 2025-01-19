@@ -105,22 +105,12 @@ class BPSO_TSP:
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-                best_route = self.decode_route(self.g_best)
+                # best_route = self.decode_route(self.g_best)
+                best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
                 
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
         return best_route, best_distance
 
-# Contoh penggunaan
-if __name__ == "__main__":
-    # Contoh data (replace dengan data nyata jika diperlukan)
-    waypoints = [(0, 0), (1, 1), (2, 0), (1, -1)]
-    start_point = (0, 0)
-    end_point = (2, 0)
-
-    bpso = BPSO_TSP(waypoints, start_point, end_point, num_particles=10, num_iterations=100, inertia_weight=0.5, c1=2.0, c2=2.0)
-    best_route, best_distance = bpso.optimize()
-
-    print("Best Route:", best_route)
-    print("Best Distance:", best_distance)
+ 
