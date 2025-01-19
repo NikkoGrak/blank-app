@@ -98,7 +98,7 @@ class BPSO_TSP:
             new_particle = np.ones(self.num_waypoints, dtype=int)  # Aktifkan semua waypoint
         return new_particle
 
-     def optimize(self):
+    def optimize(self):
         """
         Jalankan optimasi BPSO untuk menemukan solusi optimal dengan perbaikan.
         """
