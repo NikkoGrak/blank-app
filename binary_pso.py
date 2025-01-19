@@ -98,12 +98,13 @@ class BPSO_TSP:
             new_particle = np.ones(self.num_waypoints, dtype=int)  # Aktifkan semua waypoint
         return new_particle
 
-    def optimize(self):
+     def optimize(self):
         """
-        Jalankan optimasi BPSO untuk menemukan solusi optimal.
+        Jalankan optimasi BPSO untuk menemukan solusi optimal dengan perbaikan.
         """
         best_distance = float('inf')
         best_route = None
+        no_improvement_counter = 0  # Menghitung iterasi tanpa perbaikan
 
         for iteration in range(self.num_iterations):
             for i in range(self.num_particles):
@@ -131,10 +132,20 @@ class BPSO_TSP:
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
                 best_route = g_best_indices  # Simpan indeks waypoint terbaik
+                no_improvement_counter = 0  # Reset jika ada perbaikan
+            else:
+                no_improvement_counter += 1
+
+            # Jika tidak ada perbaikan setelah 10 iterasi, lakukan restart partikel
+            if no_improvement_counter >= 10:
+                self.particles = [self.initialize_particle() for _ in range(self.num_particles)]
+                print(f"Restarting particles at iteration {iteration + 1}")
+                no_improvement_counter = 0
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
         return best_route, best_distance
+
 
 
 
