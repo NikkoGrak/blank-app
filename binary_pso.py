@@ -117,7 +117,7 @@ class BPSO_TSP:
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
                 # Dapatkan best_route berdasarkan indeks jarak terbaik
-                best_route = all_routes[all_distances.index(best_distance)]
+                best_route = all_routes[all_distances.index(g_best_distance)]
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
