@@ -185,7 +185,6 @@
 
 
 
-
 import numpy as np
 import random
 from geopy.distance import geodesic
@@ -197,14 +196,17 @@ def distance_between_points(p1, p2):
 
 
 # Fungsi untuk menghitung total jarak dalam rute
-def total_distance(waypoints, start_point, end_point):
+def total_distance(selected_waypoints, start_point, end_point):
     """
     Menghitung total jarak rute berdasarkan waypoint yang dipilih.
     """
-    distance = distance_between_points(start_point, waypoints[0])  # Jarak dari titik awal ke waypoint pertama
-    for i in range(len(waypoints) - 1):
-        distance += distance_between_points(waypoints[i], waypoints[i + 1])
-    distance += distance_between_points(waypoints[-1], end_point)  # Jarak dari waypoint terakhir ke titik akhir
+    if len(selected_waypoints) == 0:
+        return float('inf')  # Jika tidak ada waypoint, jarak tidak valid
+
+    distance = distance_between_points(start_point, selected_waypoints[0])  # Jarak dari titik awal ke waypoint pertama
+    for i in range(len(selected_waypoints) - 1):
+        distance += distance_between_points(selected_waypoints[i], selected_waypoints[i + 1])
+    distance += distance_between_points(selected_waypoints[-1], end_point)  # Jarak dari waypoint terakhir ke titik akhir
     return distance
 
 
@@ -232,66 +234,52 @@ class BPSO_TSP:
 
     def initialize_particle(self):
         """
-        Inisialisasi partikel sebagai permutasi indeks waypoint.
+        Inisialisasi partikel sebagai array biner (0 atau 1).
         """
-        return list(np.random.permutation(self.num_waypoints))
+        return np.random.randint(2, size=self.num_waypoints)
 
     def initialize_velocity(self):
         """
-        Inisialisasi kecepatan sebagai daftar kosong untuk swap.
+        Inisialisasi kecepatan sebagai array float dalam rentang [0, 1].
         """
-        return []
+        return np.random.random(self.num_waypoints)
 
     def route_distance(self, particle):
         """
-        Hitung jarak total untuk partikel (permutasi).
+        Hitung jarak total untuk partikel biner.
         """
-        ordered_waypoints = [self.waypoints[idx] for idx in particle]
-        return total_distance(ordered_waypoints, self.start_point, self.end_point)
+        selected_indices = [i for i in range(len(particle)) if particle[i] == 1]
+        selected_waypoints = [self.waypoints[idx] for idx in selected_indices]
+        return total_distance(selected_waypoints, self.start_point, self.end_point)
 
     def update_velocity(self, particle, velocity, p_best, g_best):
         """
-        Update kecepatan partikel sebagai daftar swap untuk menuju p_best dan g_best.
+        Update kecepatan partikel berdasarkan rumus PSO.
         """
         r1, r2 = random.random(), random.random()
 
-        # Buat daftar swap untuk menuju p_best dan g_best
-        new_velocity = velocity[:]
-        if r1 < self.c1:
-            new_velocity += self.calculate_swaps(particle, p_best)
-        if r2 < self.c2:
-            new_velocity += self.calculate_swaps(particle, g_best)
+        # Update kecepatan dengan formula PSO
+        new_velocity = (
+            self.inertia_weight * velocity
+            + self.c1 * r1 * (p_best - particle)
+            + self.c2 * r2 * (g_best - particle)
+        )
 
-        return new_velocity
-
-    def calculate_swaps(self, source, target):
-        """
-        Hitung daftar swap untuk mengubah urutan source menjadi target.
-        """
-        swaps = []
-        s = source[:]
-        for i in range(len(s)):
-            if s[i] != target[i]:
-                swap_index = s.index(target[i])
-                swaps.append((i, swap_index))
-                # Lakukan swap
-                s[i], s[swap_index] = s[swap_index], s[i]
-        return swaps
-
-    def apply_swaps(self, particle, swaps):
-        """
-        Terapkan daftar swap pada partikel.
-        """
-        p = particle[:]
-        for i, j in swaps:
-            p[i], p[j] = p[j], p[i]
-        return p
+        # Batasi kecepatan dalam rentang [0, 1]
+        return np.clip(new_velocity, 0, 1)
 
     def update_position(self, particle, velocity):
         """
-        Update posisi partikel dengan menerapkan daftar swap dari kecepatan.
+        Update posisi partikel (biner) berdasarkan probabilitas sigmoid dari kecepatan.
         """
-        return self.apply_swaps(particle, velocity)
+        sigmoid = 1 / (1 + np.exp(-velocity))
+        new_particle = np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
+
+        # Pastikan minimal ada satu waypoint dipilih
+        if np.sum(new_particle) == 0:
+            new_particle[random.randint(0, len(new_particle) - 1)] = 1
+
+        return new_particle
 
     def optimize(self):
         """
@@ -318,10 +306,8 @@ class BPSO_TSP:
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-                best_route = self.g_best
+                best_route = [i for i, bit in enumerate(self.g_best) if bit == 1]
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
         return best_route, best_distance
-
-
