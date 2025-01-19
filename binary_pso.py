@@ -30,7 +30,7 @@ def total_distance(particle, waypoints, start_point, end_point):
 
 
 # Kelas Binary PSO (BPSO)
-class BPSO:
+class BPSO_TSP:
     def __init__(self, waypoints, start_point, end_point, num_particles, num_iterations, inertia_weight, c1, c2):
         self.waypoints = waypoints
         self.start_point = start_point
