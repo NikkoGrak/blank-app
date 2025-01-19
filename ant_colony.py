@@ -105,6 +105,7 @@ class AntColony:
             if shortest_distance < best_distance:
                 best_distance = shortest_distance
                 best_route = all_routes[all_distances.index(shortest_distance)]
+            print(f"best_route {best_route}")
             print(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
             # col2.write(f"Iterasi {iteration+1}/{self.n_iterations}, Jarak Terbaik: {best_distance:.2f} km")
         
