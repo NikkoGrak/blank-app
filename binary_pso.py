@@ -45,10 +45,15 @@ class BPSO_TSP:
                 distances[i][j] = distance_between_points(self.waypoints[i], self.waypoints[j])
                 distances[j][i] = distances[i][j]
         return distances
-
+        
     def initialize_particle(self):
-        # Membuat partikel biner dengan panjang sesuai jumlah waypoints
-        return np.random.randint(2, size=self.num_waypoints)
+        """
+        Inisialisasi partikel sebagai permutasi dari indeks waypoint.
+        """
+        particle = list(range(self.num_waypoints))
+        random.shuffle(particle)
+        return particle
+
 
     def initialize_velocity(self):
         # Kecepatan awal adalah array float dalam rentang [0, 1]
