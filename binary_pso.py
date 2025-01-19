@@ -102,13 +102,13 @@ class BPSO_TSP:
                 # Hitung jarak rute untuk personal best
                 decoded_route = self.decode_route(self.particles[i])
                 route_distance = self.route_distance(decoded_route)
-            
+
                 # Simpan semua rute dan jaraknya
                 all_routes.append(decoded_route)
                 all_distances.append(route_distance)
 
                 if route_distance < self.route_distance(self.decode_route(self.p_best[i])):
-                   self.p_best[i] = self.particles[i]
+                    self.p_best[i] = self.particles[i]
 
             # Update global best
             self.g_best = min(self.p_best, key=lambda p: self.route_distance(self.decode_route(p)))
@@ -116,16 +116,15 @@ class BPSO_TSP:
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-                # Dapatkan best_route berdasarkan indeks jarak terbaik
-                # best_route = all_routes[all_distances.index(g_best_distance)]
-                # Mapping decoded_route ke indeks dataset
                 decoded_best_route = self.decode_route(self.g_best)
-                best_route = [self.dataset.index(coord) for coord in decoded_best_route]
 
+                # Pemetaan koordinat rute terbaik ke indeks dataset
+                best_route = [self.waypoints.index(coord) for coord in decoded_best_route]
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
         return best_route, best_distance
+
 
 
     # def optimize(self):
