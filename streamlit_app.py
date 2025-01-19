@@ -7,6 +7,7 @@ from data_utils import read_waypoints_from_excel
 from ant_colony import AntColony
 from genetic import GA_TSP
 from particle_swarm import PSO_TSP
+from binary_pso import BPSO_TSP
 from visualization import plot_route_with_satelite
 import time
 
