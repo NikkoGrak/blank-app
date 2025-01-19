@@ -47,16 +47,19 @@ class BPSO_TSP:
         return distances
 
     def initialize_particle(self):
-        # Membuat partikel biner dengan panjang sesuai jumlah waypoints
-        return np.random.randint(2, size=self.num_waypoints)
+        # Partikel awal mencakup semua waypoint (semua 1)
+        particle = np.ones(self.num_waypoints, dtype=int)
+        return particle
+
 
     def initialize_velocity(self):
         # Kecepatan awal adalah array float dalam rentang [0, 1]
         return np.random.random(self.num_waypoints)
 
     def decode_route(self, particle):
-        # Decode partikel biner menjadi rute berdasarkan posisi dengan nilai 1
-        return [self.waypoints[i] for i in range(len(particle)) if particle[i] == 1]
+        # Gunakan semua waypoint dan urutkan berdasarkan indeks partikel
+        return [self.waypoints[i] for i in range(len(particle))]
+
 
     def route_distance(self, route):
         if len(route) < 2:  # Rute tidak valid jika kurang dari 2 waypoint
