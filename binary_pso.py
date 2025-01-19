@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from geopy.distance import geodesic
+import time
 
 
 # Fungsi untuk menghitung jarak antara dua titik menggunakan geodesic
@@ -17,8 +18,8 @@ def total_distance(route, start_point, end_point):
     return distance
 
 
-# Kelas BPSO untuk TSP
-class BPSO_TSP:
+# Kelas PSO untuk TSP dengan representasi permutasi
+class PSO_TSP:
     def __init__(self, waypoints, start_point, end_point, num_particles, num_iterations, inertia_weight, c1, c2):
         self.waypoints = waypoints
         self.start_point = start_point
@@ -41,55 +42,83 @@ class BPSO_TSP:
 
     def initialize_particle(self):
         """
-        Inisialisasi partikel sebagai urutan indeks binary (random).
+        Inisialisasi partikel sebagai permutasi indeks waypoint.
         """
-        particle = np.random.randint(2, size=self.num_waypoints)
+        particle = list(range(self.num_waypoints))
+        random.shuffle(particle)
         return particle
 
     def initialize_velocity(self):
         """
-        Inisialisasi kecepatan sebagai array float dalam rentang [0, 1].
+        Inisialisasi kecepatan sebagai daftar swap kosong.
         """
-        return np.random.random(self.num_waypoints)
+        return []
 
     def route_distance(self, particle):
         """
-        Hitung jarak total untuk rute berdasarkan partikel (binary).
+        Hitung jarak total untuk rute berdasarkan partikel (permutasi).
         """
-        # Pilih waypoint berdasarkan nilai biner (1 = dipilih)
-        selected_waypoints = [self.waypoints[i] for i in range(len(particle)) if particle[i] == 1]
+        route = [self.waypoints[i] for i in particle]
+        return total_distance(route, self.start_point, self.end_point)
 
-        # Jika tidak ada waypoint yang dipilih, anggap semua waypoint
-        if not selected_waypoints:
-            selected_waypoints = self.waypoints
+    def calculate_swaps(self, source, target):
+        """
+        Hitung daftar swap untuk mengubah permutasi `source` menjadi `target`.
+        """
+        swaps = []
+        s = source[:]
+        for i in range(len(s)):
+            if s[i] != target[i]:
+                # Temukan indeks elemen yang salah
+                swap_index = s.index(target[i])
+                # Rekam swap
+                swaps.append((i, swap_index))
+                # Lakukan swap
+                s[i], s[swap_index] = s[swap_index], s[i]
+        return swaps
 
-        return total_distance(selected_waypoints, self.start_point, self.end_point)
+    def apply_swaps(self, particle, swaps):
+        """
+        Terapkan daftar swap pada partikel.
+        """
+        p = particle[:]
+        for i, j in swaps:
+            p[i], p[j] = p[j], p[i]
+        return p
 
     def update_velocity(self, particle, velocity, p_best, g_best):
         """
-        Update kecepatan partikel berdasarkan PSO.
+        Update kecepatan dengan menggabungkan swap dari p_best dan g_best.
         """
         r1, r2 = random.random(), random.random()
-        new_velocity = (
-            self.inertia_weight * velocity
-            + self.c1 * r1 * (p_best - particle)
-            + self.c2 * r2 * (g_best - particle)
-        )
-        return np.clip(new_velocity, 0, 1)
+
+        # Hitung swap menuju p_best dan g_best
+        p_best_swaps = self.calculate_swaps(particle, p_best)
+        g_best_swaps = self.calculate_swaps(particle, g_best)
+
+        # Gabungkan swap berdasarkan probabilitas
+        new_velocity = velocity[:]
+        if r1 < self.c1:
+            new_velocity += p_best_swaps
+        if r2 < self.c2:
+            new_velocity += g_best_swaps
+
+        # Batasi panjang velocity untuk menghindari terlalu banyak swap
+        return new_velocity[:self.num_waypoints]
 
     def update_position(self, particle, velocity):
         """
-        Update posisi partikel (binary) berdasarkan sigmoid fungsi kecepatan.
+        Update posisi partikel dengan menerapkan swap dari velocity.
         """
-        sigmoid = 1 / (1 + np.exp(-velocity))
-        return np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
+        return self.apply_swaps(particle, velocity)
 
     def optimize(self):
         """
-        Optimasi BPSO untuk TSP.
+        Optimasi PSO untuk TSP.
         """
         best_distance = float('inf')
         best_route = None
+        start_time = time.time()
 
         for iteration in range(self.num_iterations):
             for i in range(self.num_particles):
@@ -109,10 +138,11 @@ class BPSO_TSP:
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-
-                # Konversi rute terbaik menjadi indeks waypoint
-                best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
+                best_route = self.g_best
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
+        end_time = time.time()
+        print(f"\nWaktu komputasi: {end_time - start_time:.2f} detik")
         return best_route, best_distance
+
