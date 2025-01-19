@@ -188,7 +188,7 @@ if uploaded_file is not None:
  
         
         # Membaca waypoint dari file Excel
-        pso = PSO_TSP(waypoints_coordinates, start_point, end_point, num_particles, num_iterations, w, c1, c2)
+        pso = BPSO_TSP(waypoints_coordinates, start_point, end_point, num_particles, num_iterations, w, c1, c2)
         best_route_indices, best_distance = pso.optimize()
 
         # Tambahkan 1 ke setiap indeks di best_route_indices untuk ditampilkan
