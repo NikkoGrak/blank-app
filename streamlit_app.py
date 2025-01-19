@@ -193,7 +193,8 @@ if uploaded_file is not None:
         best_route_indices, best_distance = bpso.optimize()
 
         # Tambahkan 1 ke setiap indeks di best_route_indices untuk ditampilkan
-        best_route_indices_display = [i + 1 for i in best_route_indices]
+        # best_route_indices_display = [i + 1 for i in best_route_indices]
+        best_route_indices_display = best_route_indices
         
         col3.write("**Particle Swarm Optimization Result:**")
         
