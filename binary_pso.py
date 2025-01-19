@@ -1,11 +1,12 @@
 import numpy as np
 import random
 from geopy.distance import geodesic
-from data_utils import read_waypoints_from_excel
 
-# Fungsi untuk menghitung jarak antara dua titik menggunakan geodesic (lat, lon)
+
+# Fungsi untuk menghitung jarak antara dua titik menggunakan geodesic
 def distance_between_points(p1, p2):
     return geodesic(p1, p2).kilometers
+
 
 # Fungsi untuk menghitung total jarak dalam rute
 def total_distance(route, start_point, end_point):
@@ -14,6 +15,7 @@ def total_distance(route, start_point, end_point):
         distance += distance_between_points(route[i], route[i + 1])
     distance += distance_between_points(route[-1], end_point)
     return distance
+
 
 # Kelas BPSO untuk TSP
 class BPSO_TSP:
@@ -28,68 +30,66 @@ class BPSO_TSP:
         self.c2 = c2  # Koefisien sosial
 
         self.num_waypoints = len(self.waypoints)
-        self.distances = self.calculate_distances_matrix()
 
-        # Inisialisasi posisi partikel sebagai array biner
+        # Inisialisasi posisi dan kecepatan partikel
         self.particles = [self.initialize_particle() for _ in range(num_particles)]
         self.velocities = [self.initialize_velocity() for _ in range(num_particles)]
 
         # Inisialisasi personal best dan global best
         self.p_best = self.particles[:]
-        self.g_best = min(self.particles, key=lambda p: self.route_distance(self.decode_route(p)))
-
-    def calculate_distances_matrix(self):
-        distances = np.zeros((self.num_waypoints, self.num_waypoints))
-        for i in range(self.num_waypoints):
-            for j in range(i + 1, self.num_waypoints):
-                distances[i][j] = distance_between_points(self.waypoints[i], self.waypoints[j])
-                distances[j][i] = distances[i][j]
-        return distances
+        self.g_best = min(self.particles, key=lambda p: self.route_distance(p))
 
     def initialize_particle(self):
-        # Partikel awal mencakup semua waypoint (semua 1)
-        particle = np.ones(self.num_waypoints, dtype=int)
+        """
+        Inisialisasi partikel sebagai urutan indeks binary (random).
+        """
+        particle = np.random.randint(2, size=self.num_waypoints)
         return particle
 
-
     def initialize_velocity(self):
-        # Kecepatan awal adalah array float dalam rentang [0, 1]
+        """
+        Inisialisasi kecepatan sebagai array float dalam rentang [0, 1].
+        """
         return np.random.random(self.num_waypoints)
 
-    def decode_route(self, particle):
-        # Gunakan semua waypoint dan urutkan berdasarkan indeks partikel
-        return [self.waypoints[i] for i in range(len(particle))]
+    def route_distance(self, particle):
+        """
+        Hitung jarak total untuk rute berdasarkan partikel (binary).
+        """
+        # Pilih waypoint berdasarkan nilai biner (1 = dipilih)
+        selected_waypoints = [self.waypoints[i] for i in range(len(particle)) if particle[i] == 1]
 
+        # Jika tidak ada waypoint yang dipilih, anggap semua waypoint
+        if not selected_waypoints:
+            selected_waypoints = self.waypoints
 
-    def route_distance(self, route):
-        if len(route) < 2:  # Rute tidak valid jika kurang dari 2 waypoint
-            return float('inf')
-        return total_distance(route, self.start_point, self.end_point)
+        return total_distance(selected_waypoints, self.start_point, self.end_point)
 
     def update_velocity(self, particle, velocity, p_best, g_best):
+        """
+        Update kecepatan partikel berdasarkan PSO.
+        """
         r1, r2 = random.random(), random.random()
-
-        # Update kecepatan berdasarkan formula PSO
         new_velocity = (
             self.inertia_weight * velocity
             + self.c1 * r1 * (p_best - particle)
             + self.c2 * r2 * (g_best - particle)
         )
-
-        # Batasan kecepatan dalam rentang [0, 1]
         return np.clip(new_velocity, 0, 1)
 
     def update_position(self, particle, velocity):
-        # Update posisi menggunakan sigmoid untuk menentukan probabilitas
+        """
+        Update posisi partikel (binary) berdasarkan sigmoid fungsi kecepatan.
+        """
         sigmoid = 1 / (1 + np.exp(-velocity))
-        new_particle = np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
-        return new_particle
+        return np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
 
     def optimize(self):
+        """
+        Optimasi BPSO untuk TSP.
+        """
         best_distance = float('inf')
         best_route = None
-        all_routes = []
-        all_distances = []
 
         for iteration in range(self.num_iterations):
             for i in range(self.num_particles):
@@ -100,62 +100,19 @@ class BPSO_TSP:
                 self.particles[i] = self.update_position(self.particles[i], self.velocities[i])
 
                 # Hitung jarak rute untuk personal best
-                decoded_route = self.decode_route(self.particles[i])
-                route_distance = self.route_distance(decoded_route)
-
-                # Simpan semua rute dan jaraknya
-                all_routes.append(decoded_route)
-                all_distances.append(route_distance)
-
-                if route_distance < self.route_distance(self.decode_route(self.p_best[i])):
+                if self.route_distance(self.particles[i]) < self.route_distance(self.p_best[i]):
                     self.p_best[i] = self.particles[i]
 
             # Update global best
-            self.g_best = min(self.p_best, key=lambda p: self.route_distance(self.decode_route(p)))
-            g_best_distance = self.route_distance(self.decode_route(self.g_best))
+            self.g_best = min(self.p_best, key=lambda p: self.route_distance(p))
+            g_best_distance = self.route_distance(self.g_best)
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-                decoded_best_route = self.decode_route(self.g_best)
 
-                # Pemetaan koordinat rute terbaik ke indeks dataset
-                best_route = [self.waypoints.index(coord) for coord in decoded_best_route]
+                # Konversi rute terbaik menjadi indeks waypoint
+                best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
         return best_route, best_distance
-
-
-
-    # def optimize(self):
-    #     best_distance = float('inf')
-    #     best_route = None
-
-    #     for iteration in range(self.num_iterations):
-    #         for i in range(self.num_particles):
-    #             # Update kecepatan dan posisi partikel
-    #             self.velocities[i] = self.update_velocity(
-    #                 self.particles[i], self.velocities[i], self.p_best[i], self.g_best
-    #             )
-    #             self.particles[i] = self.update_position(self.particles[i], self.velocities[i])
-
-    #             # Hitung jarak rute untuk personal best
-    #             decoded_route = self.decode_route(self.particles[i])
-    #             if self.route_distance(decoded_route) < self.route_distance(self.decode_route(self.p_best[i])):
-    #                 self.p_best[i] = self.particles[i]
-
-    #         # Update global best
-    #         self.g_best = min(self.p_best, key=lambda p: self.route_distance(self.decode_route(p)))
-    #         g_best_distance = self.route_distance(self.decode_route(self.g_best))
-
-    #         if g_best_distance < best_distance:
-    #             best_distance = g_best_distance
-    #             best_route = self.decode_route(self.g_best)
-    #             # best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
-                
-
-    #         print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
-
-    #     return best_route, best_distance
-
-   
