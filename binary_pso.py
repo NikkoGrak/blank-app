@@ -108,8 +108,8 @@ class BPSO_TSP:
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-                # best_route = self.decode_route(self.g_best)
-                best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
+                best_route = self.decode_route(self.g_best)
+                # best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
                 
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
