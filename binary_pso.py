@@ -47,8 +47,9 @@ class BPSO_TSP:
         Inisialisasi partikel sebagai array biner (0 atau 1).
         Semua waypoint pada awalnya akan digunakan.
         """
-        particle = np.ones(self.num_waypoints, dtype=int)  # Semua waypoint dipilih (nilai 1)
-        return particle
+        # particle = np.ones(self.num_waypoints, dtype=int)  # Semua waypoint dipilih (nilai 1)
+        return np.random.permutation(self.num_waypoints)
+        # return particle
 
     def initialize_velocity(self):
         """
