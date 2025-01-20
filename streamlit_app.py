@@ -199,8 +199,8 @@ if uploaded_file is not None:
         col3.write("**Particle Swarm Optimization Result:**")
         
 
-        col3.write(f"Optimal Route: {best_route_indices}")
-        # col3.write(f"Optimal Route: {best_route_indices_display}")
+        # col3.write(f"Optimal Route: {best_route_indices}")
+        col3.write(f"Optimal Route: {best_route_indices_display}")
         col3.write(f"Total Distance: {best_distance} km")
 
         end_time = time.time()
