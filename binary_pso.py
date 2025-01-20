@@ -3,13 +3,16 @@ import random
 from geopy.distance import geodesic
 
 
-# Fungsi untuk menghitung jarak antara dua titik menggunakan geodesic
+# Fungsi untuk menghitung jarak antara dua titik menggunakan geodesic (latitude, longitude)
 def distance_between_points(p1, p2):
     return geodesic(p1, p2).kilometers
 
 
 # Fungsi untuk menghitung total jarak dalam rute
 def total_distance(route, start_point, end_point):
+    """
+    Menghitung total jarak rute berdasarkan waypoint yang dipilih.
+    """
     distance = distance_between_points(start_point, route[0])
     for i in range(len(route) - 1):
         distance += distance_between_points(route[i], route[i + 1])
@@ -17,7 +20,7 @@ def total_distance(route, start_point, end_point):
     return distance
 
 
-# Kelas BPSO untuk TSP
+# Kelas Binary PSO (BPSO) untuk TSP
 class BPSO_TSP:
     def __init__(self, waypoints, start_point, end_point, num_particles, num_iterations, inertia_weight, c1, c2):
         self.waypoints = waypoints
@@ -41,10 +44,9 @@ class BPSO_TSP:
 
     def initialize_particle(self):
         """
-        Inisialisasi partikel sebagai urutan indeks binary (random).
+        Inisialisasi partikel sebagai array biner (0 atau 1).
         """
-        particle = np.random.randint(2, size=self.num_waypoints)
-        return particle
+        return np.random.randint(2, size=self.num_waypoints)
 
     def initialize_velocity(self):
         """
@@ -55,21 +57,24 @@ class BPSO_TSP:
     def route_distance(self, particle):
         """
         Hitung jarak total untuk rute berdasarkan partikel (binary).
+        Pastikan semua waypoint digunakan.
         """
-        # Pilih waypoint berdasarkan nilai biner (1 = dipilih)
-        selected_waypoints = [self.waypoints[i] for i in range(len(particle)) if particle[i] == 1]
+        selected_indices = [i for i in range(len(particle)) if particle[i] == 1]
 
         # Jika tidak ada waypoint yang dipilih, anggap semua waypoint
-        if not selected_waypoints:
-            selected_waypoints = self.waypoints
+        if len(selected_indices) == 0:
+            selected_indices = list(range(self.num_waypoints))
 
+        selected_waypoints = [self.waypoints[idx] for idx in selected_indices]
         return total_distance(selected_waypoints, self.start_point, self.end_point)
 
     def update_velocity(self, particle, velocity, p_best, g_best):
         """
-        Update kecepatan partikel berdasarkan PSO.
+        Update kecepatan partikel berdasarkan rumus PSO.
         """
         r1, r2 = random.random(), random.random()
+
+        # Update kecepatan
         new_velocity = (
             self.inertia_weight * velocity
             + self.c1 * r1 * (p_best - particle)
@@ -79,14 +84,20 @@ class BPSO_TSP:
 
     def update_position(self, particle, velocity):
         """
-        Update posisi partikel (binary) berdasarkan sigmoid fungsi kecepatan.
+        Update posisi partikel (binary) berdasarkan probabilitas sigmoid dari kecepatan.
         """
         sigmoid = 1 / (1 + np.exp(-velocity))
-        return np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
+        new_particle = np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
+
+        # Pastikan minimal satu waypoint dipilih
+        if np.sum(new_particle) == 0:
+            new_particle[random.randint(0, len(new_particle) - 1)] = 1
+
+        return new_particle
 
     def optimize(self):
         """
-        Optimasi BPSO untuk TSP.
+        Jalankan optimasi BPSO untuk menemukan solusi optimal.
         """
         best_distance = float('inf')
         best_route = None
@@ -99,7 +110,7 @@ class BPSO_TSP:
                 )
                 self.particles[i] = self.update_position(self.particles[i], self.velocities[i])
 
-                # Hitung jarak rute untuk personal best
+                # Update personal best jika solusi baru lebih baik
                 if self.route_distance(self.particles[i]) < self.route_distance(self.p_best[i]):
                     self.p_best[i] = self.particles[i]
 
@@ -110,7 +121,7 @@ class BPSO_TSP:
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
 
-                # Konversi rute terbaik menjadi indeks waypoint
+                # Simpan rute terbaik sebagai indeks waypoint
                 best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
@@ -118,8 +129,6 @@ class BPSO_TSP:
         return best_route, best_distance
 
  
-
-
 
 
 # import numpy as np
