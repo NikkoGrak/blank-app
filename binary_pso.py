@@ -99,13 +99,63 @@ class BPSO_TSP:
             new_particle = np.ones(self.num_waypoints, dtype=int)  # Aktifkan semua waypoint
         return new_particle
 
+    # def optimize(self):
+    #     """
+    #     Jalankan optimasi BPSO untuk menemukan solusi optimal dengan perbaikan.
+    #     """
+    #     best_distance = float('inf')
+    #     best_route = None
+    #     no_improvement_counter = 0  # Menghitung iterasi tanpa perbaikan
+
+    #     for iteration in range(self.num_iterations):
+    #         for i in range(self.num_particles):
+    #             # Update kecepatan dan posisi partikel
+    #             self.velocities[i] = self.update_velocity(
+    #                 self.particles[i], self.velocities[i], self.p_best[i], self.g_best
+    #             )
+    #             self.particles[i] = self.update_position(self.particles[i], self.velocities[i])
+
+    #             # Hitung jarak rute untuk partikel saat ini
+    #             selected_indices = [j for j in range(len(self.particles[i])) if self.particles[i][j] == 1]
+    #             selected_waypoints = [self.waypoints[idx] for idx in selected_indices]
+    #             current_distance = total_distance(selected_waypoints, self.start_point, self.end_point)
+
+    #             # Update personal best jika solusi baru lebih baik
+    #             if current_distance < self.route_distance(self.p_best[i]):
+    #                 self.p_best[i] = self.particles[i]
+
+    #         # Update global best
+    #         self.g_best = min(self.p_best, key=lambda p: self.route_distance(p))
+    #         g_best_indices = [j for j in range(len(self.g_best)) if self.g_best[j] == 1]
+    #         g_best_distance = total_distance([self.waypoints[idx] for idx in g_best_indices],
+    #                                           self.start_point, self.end_point)
+
+    #         if g_best_distance < best_distance:
+    #             best_distance = g_best_distance
+    #             best_route = g_best_indices  # Simpan indeks waypoint terbaik
+    #             no_improvement_counter = 0  # Reset jika ada perbaikan
+    #         else:
+    #             no_improvement_counter += 1
+
+    #         # Jika tidak ada perbaikan setelah 10 iterasi, lakukan restart partikel
+    #         if no_improvement_counter >= 10:
+    #             self.particles = [self.initialize_particle() for _ in range(self.num_particles)]
+    #             print(f"Restarting particles at iteration {iteration + 1}")
+    #             no_improvement_counter = 0
+
+    #         print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
+
+    #     return best_route, best_distance
+
+
+
+
     def optimize(self):
         """
-        Jalankan optimasi BPSO untuk menemukan solusi optimal dengan perbaikan.
+        Jalankan optimasi BPSO untuk menemukan solusi optimal.
         """
         best_distance = float('inf')
         best_route = None
-        no_improvement_counter = 0  # Menghitung iterasi tanpa perbaikan
 
         for iteration in range(self.num_iterations):
             for i in range(self.num_particles):
@@ -115,72 +165,22 @@ class BPSO_TSP:
                 )
                 self.particles[i] = self.update_position(self.particles[i], self.velocities[i])
 
-                # Hitung jarak rute untuk partikel saat ini
-                selected_indices = [j for j in range(len(self.particles[i])) if self.particles[i][j] == 1]
-                selected_waypoints = [self.waypoints[idx] for idx in selected_indices]
-                current_distance = total_distance(selected_waypoints, self.start_point, self.end_point)
-
                 # Update personal best jika solusi baru lebih baik
-                if current_distance < self.route_distance(self.p_best[i]):
+                if self.route_distance(self.particles[i]) < self.route_distance(self.p_best[i]):
                     self.p_best[i] = self.particles[i]
 
             # Update global best
             self.g_best = min(self.p_best, key=lambda p: self.route_distance(p))
-            g_best_indices = [j for j in range(len(self.g_best)) if self.g_best[j] == 1]
-            g_best_distance = total_distance([self.waypoints[idx] for idx in g_best_indices],
-                                              self.start_point, self.end_point)
+            g_best_distance = self.route_distance(self.g_best)
 
             if g_best_distance < best_distance:
                 best_distance = g_best_distance
-                best_route = g_best_indices  # Simpan indeks waypoint terbaik
-                no_improvement_counter = 0  # Reset jika ada perbaikan
-            else:
-                no_improvement_counter += 1
-
-            # Jika tidak ada perbaikan setelah 10 iterasi, lakukan restart partikel
-            if no_improvement_counter >= 10:
-                self.particles = [self.initialize_particle() for _ in range(self.num_particles)]
-                print(f"Restarting particles at iteration {iteration + 1}")
-                no_improvement_counter = 0
+                # Simpan rute terbaik berdasarkan indeks waypoint
+                best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
 
             print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
 
         return best_route, best_distance
-
-
-
-
-# # def optimize(self):
-#     #     """
-#     #     Jalankan optimasi BPSO untuk menemukan solusi optimal.
-#     #     """
-#     #     best_distance = float('inf')
-#     #     best_route = None
-
-#     #     for iteration in range(self.num_iterations):
-#     #         for i in range(self.num_particles):
-#     #             # Update kecepatan dan posisi partikel
-#     #             self.velocities[i] = self.update_velocity(
-#     #                 self.particles[i], self.velocities[i], self.p_best[i], self.g_best
-#     #             )
-#     #             self.particles[i] = self.update_position(self.particles[i], self.velocities[i])
-
-#     #             # Update personal best jika solusi baru lebih baik
-#     #             if self.route_distance(self.particles[i]) < self.route_distance(self.p_best[i]):
-#     #                 self.p_best[i] = self.particles[i]
-
-#     #         # Update global best
-#     #         self.g_best = min(self.p_best, key=lambda p: self.route_distance(p))
-#     #         g_best_distance = self.route_distance(self.g_best)
-
-#     #         if g_best_distance < best_distance:
-#     #             best_distance = g_best_distance
-#     #             # Simpan rute terbaik berdasarkan indeks waypoint
-#     #             best_route = [i for i in range(len(self.g_best)) if self.g_best[i] == 1]
-
-#     #         print(f"Iteration {iteration + 1}/{self.num_iterations}, Best Distance: {best_distance:.2f} km")
-
-#     #     return best_route, best_distance
 
 
 
