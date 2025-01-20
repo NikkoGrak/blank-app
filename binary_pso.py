@@ -86,7 +86,9 @@ class BPSO_TSP:
         """
         Update posisi partikel (binary) berdasarkan probabilitas sigmoid dari kecepatan.
         """
-        sigmoid = 1 / (1 + np.exp(-velocity))
+        # sigmoid = 1 / (1 + np.exp(-velocity))
+        k = 2  # Faktor pengali untuk sigmoid
+        sigmoid = 1 / (1 + np.exp(-k * velocity))
         new_particle = np.array([1 if random.random() < sigmoid[i] else 0 for i in range(len(particle))])
 
         # Pastikan minimal satu waypoint dipilih
